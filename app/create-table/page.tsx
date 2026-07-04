@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function CreateTable() {
+  const router = useRouter();
   const [config, setConfig] = useState({
-    name: '',
+    name: 'Friday Night Table',
     numDecks: 6,
     blackjackPayout: '3:2',
     dealerHitsSoft17: true,
@@ -13,9 +15,10 @@ export default function CreateTable() {
     maxPlayers: 5,
   });
 
-  const handleCreate = () => {
-    console.log('Creating table with config:', config);
-    alert('Table created! (Demo - storage coming soon)');
+  const createAndPlay = () => {
+    // Save to localStorage for now
+    localStorage.setItem('currentTable', JSON.stringify(config));
+    router.push('/games/blackjack');
   };
 
   return (
@@ -30,8 +33,7 @@ export default function CreateTable() {
               type="text"
               value={config.name}
               onChange={(e) => setConfig({...config, name: e.target.value})}
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3"
-              placeholder="Friday Night VIP"
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-lg"
             />
           </div>
 
@@ -45,15 +47,15 @@ export default function CreateTable() {
 
             <div>
               <label className="block text-sm mb-2">Blackjack Payout</label>
-              <select value={config.blackjackPayout} onChange={(e) => setConfig({...config, blackjackPayout: e.target.value as any})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3">
+              <select value={config.blackjackPayout} onChange={(e) => setConfig({...config, blackjackPayout: e.target.value})} className="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3">
                 <option value="3:2">3:2 (Standard)</option>
-                <option value="6:5">6:5 (High House Edge)</option>
+                <option value="6:5">6:5</option>
               </select>
             </div>
           </div>
 
-          <button onClick={handleCreate} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black py-6 rounded-2xl text-xl font-semibold">
-            Create Table
+          <button onClick={createAndPlay} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black py-6 rounded-2xl text-xl font-semibold">
+            Create & Play
           </button>
         </div>
       </div>
